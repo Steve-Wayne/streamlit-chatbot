@@ -27,7 +27,7 @@ def analyze_file(file):
         elif file.name.endswith('.txt'):
             content = file.read().decode('utf-8')
             st.markdown("### File Content")
-            st.text_area("Content", content, height=300)
+            st.text_area("Content", content, height=300, label_visibility="collapsed")
         else:
             st.error("Unsupported file format. Please upload a .csv or .txt file.")
     except Exception as e:
@@ -35,12 +35,38 @@ def analyze_file(file):
 
 # Streamlit app layout
 st.set_page_config(page_title="AI Chatbot", page_icon="🤖", layout="wide")
-st.title(" AI-Powered Chatbot")
-st.markdown("<style>.main {text-align: center;}</style>", unsafe_allow_html=True)
+
+# Header section with styling
+st.markdown(
+    """
+    <style>
+    .main-title {
+        text-align: center;
+        color: #4CAF50;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 20px;
+    }
+    .sidebar-header {
+        color: #4CAF50;
+        font-weight: bold;
+    }
+    .response-container {
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        margin-top: 10px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown("<h1 class='main-title'>🤖 AI-Powered Chatbot</h1>", unsafe_allow_html=True)
 
 # Sidebar for user input and history
 with st.sidebar:
-    st.header("🗂 Chat History")
+    st.header("🗂 Chat History", anchor="sidebar-header")
     if 'chat_history' not in st.session_state:
         st.session_state['chat_history'] = []
 
@@ -52,11 +78,12 @@ with st.sidebar:
 
 # Main content for the chatbot
 st.markdown("---")
-st.subheader("💬 Let's Chat!")
-col1, col2 = st.columns([3, 1])
+st.subheader("🖊 Let's Chat!")
+
+col1, col2 = st.columns([4, 1])
 
 with col1:
-    user_input = st.text_input("Type your message here:", placeholder="Say something...")
+    user_input = st.text_input("Type your message here:", placeholder="Say something...", label_visibility="collapsed")
 with col2:
     submit = st.button("Send", use_container_width=True)
 
@@ -74,10 +101,16 @@ if user_input and submit:
 
     # Display the AI response incrementally
     st.markdown("### 🤖 AI's Response")
+    response_container = st.empty()
+    full_response = ""
+
     for part in response:
-        st.write(part.text)
-        st.session_state['chat_history'].append({"role": "AI", "message": part.text})
+        full_response += part.text
+        response_container.markdown(f"<div class='response-container'>{full_response}</div>", unsafe_allow_html=True)
+
+    st.session_state['chat_history'].append({"role": "AI", "message": full_response})
 
 # Footer
 st.markdown("---")
 st.caption("Powered by Gemini AI")
+
