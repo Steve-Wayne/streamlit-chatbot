@@ -1,4 +1,4 @@
-# streamlit-chatbot
+# Streamlit-chatbot{Version 1.0}
 
 # AI-Powered Chatbot with File Analysis
 This Streamlit application integrates Gemini AI to provide conversational responses and allows users to upload and analyze `.csv` or `.txt` files. Just a  debbugging
