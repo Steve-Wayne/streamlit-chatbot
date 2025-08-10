@@ -3,3 +3,4 @@ streamlit
 pandas
 python-dotenv
 google-generativeai
+djangoadmin
